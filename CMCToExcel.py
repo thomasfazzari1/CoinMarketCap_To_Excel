@@ -30,4 +30,4 @@ for crypto in devises:
 	price = json.loads(response.text)['data'][crypto][0]['quote']['USD']['price']
 	# ajout d'une ligne contenant la devise et le prix correspondant
 	ws.append(["$"+crypto, price])
-	wb.save('prices.xlsx')
+	wb.save('data.xlsx')
