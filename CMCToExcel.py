@@ -11,7 +11,7 @@ import requests
 wb = Workbook()
 #feuille 1
 ws = wb.active
-ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H"])
+ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H","TOTAL SUPPLY"])
 
 key = input("Saisissez votre clé d'API (https://pro.coinmarketcap.com/account) : ")
 quotesLatestUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
@@ -36,12 +36,14 @@ for crypto in devises:
 		price = round((json.loads(response.text)['data'][crypto][0]['quote']['USD']['price']),2)
 		marketcap = json.loads(response.text)['data'][crypto][0]['quote']['USD']['market_cap']
 		volume24h = json.loads(response.text)['data'][crypto][0]['quote']['USD']['volume_24h']
+		totalSupply = json.loads(response.text)['data'][crypto][0]['total_supply']
 	except dataError:
 		price = "Erreur"
 		marketcap = "Erreur"
 		volume24h = "Erreur"
+		totalSupply = "Erreur"
 	# ajout d'une ligne contenant la devise et le prix correspondant
-	ws.append(["$"+ crypto, price, marketcap,volume24h])
+	ws.append(["$"+ crypto, price, marketcap,volume24h,totalSupply])
 
 #personnalisation de la feuille excel
 #police
