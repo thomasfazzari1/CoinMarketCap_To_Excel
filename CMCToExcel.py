@@ -11,7 +11,7 @@ import requests
 wb = Workbook()
 #feuille 1
 ws = wb.active
-ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H","TOTAL SUPPLY"])
+ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H","TOTAL SUPPLY","RANG CMC"])
 
 
 key = input("Saisissez votre clé d'API (https://pro.coinmarketcap.com/account) : ")
@@ -39,19 +39,32 @@ for crypto in devises:
 		marketcap = json.loads(response.text)['data'][crypto][0]['quote']['USD']['market_cap']
 		volume24h = json.loads(response.text)['data'][crypto][0]['quote']['USD']['volume_24h']
 		totalSupply = json.loads(response.text)['data'][crypto][0]['total_supply']
+		cmcRank = json.loads(response.text)['data'][crypto][0]['cmc_rank']
 	except KeyError:
 		price = "Erreur : taux dépassé"
 		marketcap = "-"
 		volume24h = "-"
 		totalSupply = "-"
+		cmcRank = "-"
 	# ajout d'une ligne contenant la devise et le prix correspondant
-	ws.append(["$"+ crypto, price, marketcap,volume24h,totalSupply])
+	ws.append(["$"+ crypto, price, marketcap,volume24h,totalSupply,cmcRank])
 
 #personnalisation de la feuille excel
-#police
+#taille police
+for row in ws.iter_rows():
+    for cell in row:
+        cell.font = Font(size=14)
+        
+#on colore la colonne contenant les devises
+for row in ws.iter_rows(min_row=2, min_col=1, max_col=1, max_row=ws.max_row):
+    for cell in row:
+        cell.fill = PatternFill(start_color="B0F2B6", end_color="B0F2B6", fill_type = "solid")
+        
+#entêtes
 for cell in ws[1]:
-    cell.font = Font(name='Arial', bold=True)
-
+	cell.font = Font(name='Calibri', color='FFFFFF', size="14")
+	cell.fill = PatternFill(start_color="096A09", end_color="096A09", fill_type = "solid")
+	
 #taille automatique des colonnes
 for col in ws.columns:
     max_length = 0
@@ -64,20 +77,6 @@ for col in ws.columns:
             pass
     adjusted_width = (max_length + 2) * 1.2
     ws.column_dimensions[get_column_letter(column)].width = adjusted_width
-
-#on colore la colonne contenant les devises
-for row in ws.iter_rows(min_row=2, min_col=1, max_col=1, max_row=ws.max_row):
-    for cell in row:
-        cell.fill = PatternFill(start_color="B0F2B6", end_color="B0F2B6", fill_type = "solid")
-
-#entêtes
-for cell in ws[1]:
-    cell.fill = PatternFill(start_color="096A09", end_color="096A09", fill_type = "solid")
-for cell in ws[1]:
-    cell.font = Font(color="FFFFFF")
-for row in ws.iter_rows():
-    for cell in row:
-        cell.font = Font(size=14)
 
 
 
