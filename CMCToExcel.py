@@ -5,14 +5,13 @@ from openpyxl.utils import get_column_letter
 from openpyxl.styles import PatternFill
 import pprint
 import json
+import requests
 
 #creation du fichier excel
 wb = Workbook()
 #feuille 1
 ws = wb.active
 ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H"])
-for cell in ws[1]:
-    cell.font = Font(name='Arial', bold=True)
 
 key = input("Saisissez votre clé d'API (https://pro.coinmarketcap.com/account) : ")
 quotesLatestUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
@@ -40,6 +39,10 @@ for crypto in devises:
 	ws.append(["$"+ crypto, price, marketcap,volume24h])
 
 #personnalisation de la feuille excel
+#police
+for cell in ws[1]:
+    cell.font = Font(name='Arial', bold=True)
+
 #taille automatique des colonnes
 for col in ws.columns:
     max_length = 0
