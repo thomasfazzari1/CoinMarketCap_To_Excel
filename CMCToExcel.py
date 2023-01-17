@@ -13,8 +13,9 @@ wb = Workbook()
 ws = wb.active
 ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H","TOTAL SUPPLY"])
 
-headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': key}
+
 key = input("Saisissez votre clé d'API (https://pro.coinmarketcap.com/account) : ")
+headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': key}
 quotesLatestUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
 listedLatestUrl = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 
