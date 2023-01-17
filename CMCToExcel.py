@@ -29,12 +29,17 @@ for crypto in devises:
 		'Accepts':'application/json',
 		'X-CMC_PRO_API_KEY':key
 	}
-	session = Session()
-	session.headers.update(headers)
-	response = session.get(quotesLatestUrl, params = data)
-	price = round((json.loads(response.text)['data'][crypto][0]['quote']['USD']['price']),2)
-	marketcap = json.loads(response.text)['data'][crypto][0]['quote']['USD']['market_cap']
-	volume24h = json.loads(response.text)['data'][crypto][0]['quote']['USD']['volume_24h']
+	try:
+		session = Session()
+		session.headers.update(headers)
+		response = session.get(quotesLatestUrl, params = data)
+		price = round((json.loads(response.text)['data'][crypto][0]['quote']['USD']['price']),2)
+		marketcap = json.loads(response.text)['data'][crypto][0]['quote']['USD']['market_cap']
+		volume24h = json.loads(response.text)['data'][crypto][0]['quote']['USD']['volume_24h']
+	except dataError:
+		price = "Erreur"
+		marketcap = "Erreur"
+		volume24h = "Erreur"
 	# ajout d'une ligne contenant la devise et le prix correspondant
 	ws.append(["$"+ crypto, price, marketcap,volume24h])
 
