@@ -17,11 +17,8 @@ key = input("Saisissez votre clé d'API (https://pro.coinmarketcap.com/account) 
 quotesLatestUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
 
 #tableau des cryptomonnaies ciblées, à modifier en dur dans le script
-devises = ("BTC", "ETH", "BNB", "USDT", "XRP", "ADA", "LINK", "DOT", "LTC", "BCH", 
-           "XLM", "USDC", "WBTC", "SUSHI", "CAKE", "UNI", "BAND", "SOL", "AAVE", "YFI", 
-           "SNX", "COMP", "KSM", "MKR", "NEXO", "HT", "NANO", "GRT", "REN", "DOGE", 
-           "ANKR", "FTM", "CRV", "BNT", "KAVA", "SC", "ENJ", "CHZ", "BAL", "MANA", 
-           "LEND", "KEEP", "QTUM", "DUSK", "DCR", "NXM", "MATIC")
+devises = ("BTC","ETH","BNB","USDT","XRP","ADA","ORAI","MATIC","DOT","AVAX","TRX","UNI","ATOM","LINK", "ANKR", "FTM")
+
 #récupération des données et enregistrement dans la feuille excel
 for crypto in devises:
 	data = {
