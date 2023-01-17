@@ -13,21 +13,22 @@ wb = Workbook()
 ws = wb.active
 ws.append(["DEVISE","PRIX","MARKETCAP","VOLUME SOUS 24H","TOTAL SUPPLY"])
 
+headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': key}
 key = input("Saisissez votre clé d'API (https://pro.coinmarketcap.com/account) : ")
 quotesLatestUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
+listedLatestUrl = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 
-#tableau des cryptomonnaies ciblées, à modifier en dur dans le script
-devises = ("BTC","ETH","BNB","USDT","XRP","ADA","ORAI","MATIC","DOT","AVAX","TRX","UNI","ATOM","LINK", "ANKR", "FTM")
+param = {'start':'1', 'limit':'29'}
+response = requests.get(listedLatestUrl, headers=headers, params=param)
+jsonResponse = response.json()
+#tableau comportant les 30 cryptomonnaies les plus populaires
+devises = tuple([d['symbol'] for d in jsonResponse['data']])
 
 #récupération des données et enregistrement dans la feuille excel
 for crypto in devises:
 	data = {
 		'symbol':crypto,
 		'convert':'USD'
-	}
-	headers = {
-		'Accepts':'application/json',
-		'X-CMC_PRO_API_KEY':key
 	}
 	try:
 		session = Session()
@@ -37,11 +38,11 @@ for crypto in devises:
 		marketcap = json.loads(response.text)['data'][crypto][0]['quote']['USD']['market_cap']
 		volume24h = json.loads(response.text)['data'][crypto][0]['quote']['USD']['volume_24h']
 		totalSupply = json.loads(response.text)['data'][crypto][0]['total_supply']
-	except dataError:
-		price = "Erreur"
-		marketcap = "Erreur"
-		volume24h = "Erreur"
-		totalSupply = "Erreur"
+	except KeyError:
+		price = "Erreur : taux dépassé"
+		marketcap = "-"
+		volume24h = "-"
+		totalSupply = "-"
 	# ajout d'une ligne contenant la devise et le prix correspondant
 	ws.append(["$"+ crypto, price, marketcap,volume24h,totalSupply])
 
@@ -80,5 +81,3 @@ for row in ws.iter_rows():
 
 
 wb.save('data.xlsx')
-    
-    
