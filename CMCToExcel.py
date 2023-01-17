@@ -20,5 +20,6 @@ headers = {
 session = Session()
 session.headers.update(headers)
 response = session.get(quotesLatestUrl, params = data)
-pprint.pprint('Prix actuel de '+crypto)
-pprint.pprint(json.loads(response.text)['data'][crypto][0]['quote']['USD']['price'])
+
+price = json.loads(response.text)['data'][crypto][0]['quote']['USD']['price']
+pprint.pprint("Prix actuel de "+crypto+" : " + str(round(price,2)) + " $.")
